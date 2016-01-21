@@ -2,54 +2,136 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Basic JSON Editor Example</title>
+    <title>About.Yml Maker</title>
     <script src="../dist/jsoneditor.js"></script>
   </head>
   <body>
-    <h1>Basic JSON Editor Example</h1>
+    <h1>About.Yml Maker</h1>
     
     <div id='editor_holder'></div>
-    <button id='submit'>Submit (console.log)</button>
+    <button id='submit'>Submit</button>
     
     <script>
       // Initialize the editor with a JSON schema
       var editor = new JSONEditor(document.getElementById('editor_holder'),{
         schema: {
           type: "object",
-          title: "Car",
+          title: "about_yml",
           properties: {
-            make: {
-              type: "string",
-              enum: [
-                "Toyota",
-                "BMW",
-                "Honda",
-                "Ford",
-                "Chevy",
-                "VW"
-              ]
+            "name": {
+            "type": "string",
+            "description": "Short name that acts as the project identifier"
             },
-            model: {
-              type: "string"
+            "full_name": {
+            "type": "string",
+            "description": "Full proper name of the project"
+        },
+            "type": {
+            "type": "string",
+            "description": "The type of content in the repo",
+            "enum": ["app", "docs", "policy"]
+        },
+        "owner_type": {
+            "type": "string",
+            "description": "Describes whether a project team, working group/guild, etc. owns the repo",
+            "enum": ["guild", "working-group", "project"]
+        },
+        "parent": {
+            "type": "string",
+            "description": "Name of the main project repo if this is a sub-repo; name of the working group/guild repo if this is a working group/guild subproject"
+        },
+        "stage": {
+            "type": "string",
+            "enum": ["discovery", "alpha", "beta", "live", "sunset", "transfer", "end"],
+            "description": "Maturity stage of the project"
+        },
+        "description": {
+            "type": "string",
+            "description": "Description of the project"
+        },
+        "tags": {
+            "type": "array",
+            "description": "Tags that describe the project or aspects of the project",
+            "items": {"type": "string"},
+            "uniqueItems": true
+        },
+        "testable": {
+            "type": "boolean",
+            "default": false,
+            "description": "Should this repo have automated tests? If so, set to `true`."
+        },
+        "team": {
+            "type": "array",
+            "description": "Team members contributing to the project",
+            "items": {
+                "$ref": "#/definitions/person"
             },
-            year: {
-              type: "integer",
-              enum: [
-                1995,1996,1997,1998,1999,
-                2000,2001,2002,2003,2004,
-                2005,2006,2007,2008,2009,
-                2010,2011,2012,2013,2014
-              ],
-              default: 2008
+            "uniqueItems": true
+        },
+        "partners": {
+            "type": "array",
+            "description": "Partners for whom the project is developed",
+            "items": {"type": "string"},
+            "uniqueItems": true
+        },
+        "users": {
+            "type": "array",
+            "description": "Organizations or individuals who have adopted the project for their own use",
+            "items": {
+                "$ref": "#/definitions/user"
+            },
+            "uniqueItems": true
+        },
+        "milestones": {
+            "type": "array",
+            "description": "Brief descriptions of significant project developments",
+            "items": {"type": "string"},
+            "uniqueItems": true
+        },
+        "stack": {
+            "type": "array",
+            "description": "Technologies used to build the project",
+            "items": {"type": "string"},
+            "uniqueItems": true
+        },
+        "impact": {
+            "type": "string",
+            "description": "Brief description of the project's outcomes"
+        },
+        "services": {
+            "type": "array",
+            "description": "Services used to supply project status information",
+            "items": {
+                "$ref": "#/definitions/service"
+            },
+            "uniqueItems": true
+        },
+        "licenses": {
+            "type": "object",
+            "description": "Licenses that apply to the project and/or its components",
+            "patternProperties": {
+                ".*": {"$ref": "#/definitions/license"}
             }
+        },
+        "blogTag": {
+            "type": "array",
+            "description": "Tag to use when blogging about this project",
+            "items": {
+                "type": "string"
+            },
+            "uniqueItems": true
+        },
+        "links": {
+            "type": "array",
+            "description": "Links to project artifacts",
+            "items": {
+                "$ref": "#/definitions/link"
+            },
+            "format": "uri",
+            "uniqueItems": true
+        },
           }
         }
-      });
-      
-      // Hook up the submit button to log to the console
-      document.getElementById('submit').addEventListener('click',function() {
-        // Get the value from the editor
-        console.log(editor.getValue());
       });
     </script>
   </body>
